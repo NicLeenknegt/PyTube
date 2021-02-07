@@ -18,6 +18,7 @@ from multiprocessing import Pool
 import os
 from time import perf_counter
 import json
+from data.repository.SelectionListRepository import save_videos_to_selection_list, save_sub_to_selection_list, save_selection_list, read_selection_list, read_selection_list_file, remove_item_from_selection_list, get_selection_list_type
 
 def get_new_videos():
     driver = SimpleDriver()
@@ -53,43 +54,6 @@ def insert_subscription_from_url(url:str):
         sub.set_converter(content_converter)
         insert_subscription(sub)
         load_all_videos(sub)
-
-def save_videos_to_selection_list(vids:[Video]):
-    vid_array:dict = [vid.to_dict() for vid in vids]
-    save_selection_list({"type":"video", "content":vid_array})
-
-def save_sub_to_selection_list(subs:[Subscription]):
-    sub_array:dict = [sub.to_dict() for sub in subs]
-    save_selection_list({"type":"subscription", "content":sub_array})
-
-def save_selection_list(selection_list:dict):
-    abs_path = os.getcwd() + "/data/selection_list.json"
-    selection_list_file = open(abs_path, 'w')
-    selection_list_file.write(json.dumps(selection_list))
-    selection_list_file.close()
-
-def read_selection_list_file():
-    abs_path = os.getcwd() + "/data/selection_list.json"
-    selection_list_file = open(abs_path, 'r')
-    result = json.loads(selection_list_file.read())
-    selection_list_file.close()
-    return result
-
-def read_selection_list():
-    selection_list:dict = read_selection_list_file()
-    if selection_list["type"] == "video":
-        return [vid_from_dict(selection) for selection in selection_list['content']]
-    if selection_list["type"] == "subscription":
-        return [subscription_from_dict(selection) for selection in selection_list['content']]
-
-def remove_item_from_selection_list(index:int):
-    selection_list = read_selection_list_file()
-    del selection_list["content"][index]
-    save_selection_list(selection_list)
-
-def get_selection_list_type() -> str:
-    selection_list:dict = read_selection_list_file()
-    return selection_list["type"]
 
 def main(argv):
 
@@ -146,7 +110,6 @@ def main(argv):
             index = int(arg)
             result = read_selection_list()
             if get_selection_list_type() == "video":
-                print("check")
                 delete_video_cascade(result[index].id)
             elif get_selection_list_type() == "subscription":
                 delete_sub(None, result[index].url_name)            
