@@ -16,3 +16,17 @@ class ContentPlayer:
 
     def __str__(self):
         return "{0:30}{1:100}{2}".format(self.name, self.command, "ACTIVE" if self.is_active else "")
+
+    def to_dict(self) -> dict:
+        return {
+                "name":self.name,
+                "command":self.command,
+                "is_active":self.is_active
+                }
+
+def content_player_from_dict(json:dict):
+    return ContentPlayer(
+            json['name'],
+            json['command'],
+            json['is_active']
+            )

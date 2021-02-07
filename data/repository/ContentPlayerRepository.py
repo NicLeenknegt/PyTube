@@ -1,4 +1,4 @@
-from data.repository.RepositoryDecorator import fetch_request, insert_request, delete_request
+from data.repository.RepositoryDecorator import fetch_request, insert_request, delete_request, update_request
 from domain.ContentPlayer import ContentPlayer
 
 @insert_request("content_player")
@@ -23,3 +23,9 @@ def fetch_content_players(cursor = None) -> [ContentPlayer]:
         fetched_content_players.append(ContentPlayer(row[0], row[1], is_active))
     
     return fetched_content_players
+
+@update_request("content_player", "set is_active = 1 where name = ?")
+def update_content_player(cursor, cp_name:str):
+    for row in cursor:
+        print(row)
+

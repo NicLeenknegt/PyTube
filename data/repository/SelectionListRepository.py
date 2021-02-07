@@ -1,7 +1,12 @@
+from domain.ContentPlayer import ContentPlayer, content_player_from_dict
 from domain.Video import Video, vid_from_dict
 from domain.Subscription import Subscription,subscription_from_dict
 import json
 import os
+
+def save_content_player_to_selection_list(content_players:[ContentPlayer]):
+    content_player_array:dict = [content_player.to_dict() for content_player in content_players]
+    save_selection_list({"type":"content_player", "content":content_player_array})
 
 def save_videos_to_selection_list(vids:[Video]):
     vid_array:dict = [vid.to_dict() for vid in vids]
@@ -28,8 +33,10 @@ def read_selection_list():
     selection_list:dict = read_selection_list_file()
     if selection_list["type"] == "video":
         return [vid_from_dict(selection) for selection in selection_list['content']]
-    if selection_list["type"] == "subscription":
+    elif selection_list["type"] == "subscription":
         return [subscription_from_dict(selection) for selection in selection_list['content']]
+    elif selection_list["type"] == "content_player":
+        return [content_player_from_dict(selection) for selection in selection_list['content']]
 
 def remove_item_from_selection_list(index:int):
     selection_list = read_selection_list_file()

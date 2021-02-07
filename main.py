@@ -18,9 +18,9 @@ from multiprocessing import Pool
 import os
 from time import perf_counter
 import json
-from data.repository.SelectionListRepository import save_videos_to_selection_list, save_sub_to_selection_list, save_selection_list, read_selection_list, read_selection_list_file, remove_item_from_selection_list, get_selection_list_type
+from data.repository.SelectionListRepository import save_videos_to_selection_list, save_sub_to_selection_list, save_selection_list, read_selection_list, read_selection_list_file, remove_item_from_selection_list, get_selection_list_type, save_content_player_to_selection_list
 from domain.ContentPlayer import ContentPlayer
-from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player, fetch_content_players
+from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player, fetch_content_players,update_content_player
 
 def get_new_videos():
     driver = SimpleDriver()
@@ -108,6 +108,9 @@ def main(argv):
                 vids:[Video] = fetch_all_videos_of_subscription(None, result[index].url_name)
                 save_videos_to_selection_list(vids)                
                 show_list(vids)
+            elif get_selection_list_type() == "content_player":
+                update_content_player(None, result[index].name)
+                save_content_player_to_selection_list(fetch_content_players())
         elif opt in ("-d", "--delete"):
             index:int
             index = int(arg)
@@ -125,11 +128,11 @@ def main(argv):
             show_list(subs)
         elif opt in ("-p", "--players"):
             players:[ContentPlayer] = fetch_content_players()
+            save_content_player_to_selection_list(players)
             show_list(players)
         elif opt in ("--add-player"):
             if len(argv) < 3 or len(argv) > 4:
                 raise ValueError("format is: pytube --add-player [name] [command] [active]")
-            print(argv)
             if len(argv) == 4 and argv[3] == "active":
                 content_player = ContentPlayer(argv[1], argv[2], True)
             else:
