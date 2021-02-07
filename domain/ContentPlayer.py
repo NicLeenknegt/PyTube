@@ -13,3 +13,6 @@ class ContentPlayer:
         result = call(run_command, stdout=PIPE, shell=True)
         if result > 0:
             raise ValueError("content player command failed")
+
+    def __str__(self):
+        return "{0:30}{1:100}{2}".format(self.name, self.command, "ACTIVE" if self.is_active else "")

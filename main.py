@@ -20,7 +20,7 @@ from time import perf_counter
 import json
 from data.repository.SelectionListRepository import save_videos_to_selection_list, save_sub_to_selection_list, save_selection_list, read_selection_list, read_selection_list_file, remove_item_from_selection_list, get_selection_list_type
 from domain.ContentPlayer import ContentPlayer
-from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player
+from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player, fetch_content_players
 
 def get_new_videos():
     driver = SimpleDriver()
@@ -60,8 +60,9 @@ def insert_subscription_from_url(url:str):
 def main(argv):
 
     try:
-        opts, args = getopt(argv,"d:a:ns:ou", 
+        opts, args = getopt(argv,"pd:a:ns:ou", 
                 [
+                    "players",
                     "add-player=",
                     "delete",
                     "new",
@@ -122,6 +123,9 @@ def main(argv):
             subs:[Subscription] = fetch_all_subscriptions()
             save_sub_to_selection_list(subs)
             show_list(subs)
+        elif opt in ("-p", "--players"):
+            players:[ContentPlayer] = fetch_content_players()
+            show_list(players)
         elif opt in ("--add-player"):
             if len(argv) < 3 or len(argv) > 4:
                 raise ValueError("format is: pytube --add-player [name] [command] [active]")
