@@ -100,7 +100,7 @@ def main(argv):
                     "new",
                     "select=",
                     "old=",
-                    "add-subs=",
+                    "add-sub=",
                     "subs",
                 ])
     except GetoptError:
@@ -151,8 +151,8 @@ def main(argv):
             elif get_selection_list_type() == "subscription":
                 delete_sub(None, result[index].name)            
             remove_item_from_selection_list(index)
-        elif opt in ("-a", "--add-subs="):
-            insert_subscription_from_url(argv[1])
+        elif opt in ("-a", "--add-sub"):
+            insert_subscription_from_url(arg)
         elif opt in ("-u", "--subs="):
             subs:[Subscription] = fetch_all_subscriptions()
             save_sub_to_selection_list(subs)
