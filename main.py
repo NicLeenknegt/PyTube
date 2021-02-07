@@ -141,7 +141,7 @@ def main(argv):
                 vids:[Video] = fetch_all_videos_of_subscription(None, result[index].url_name)
                 save_videos_to_selection_list(vids)                
                 show_list(vids)
-        elif opt in ("-d", "--delete="):
+        elif opt in ("-d", "--delete"):
             index:int
             index = int(arg)
             result = read_selection_list()
@@ -149,11 +149,11 @@ def main(argv):
                 print("check")
                 delete_video_cascade(result[index].id)
             elif get_selection_list_type() == "subscription":
-                delete_sub(None, result[index].name)            
+                delete_sub(None, result[index].url_name)            
             remove_item_from_selection_list(index)
         elif opt in ("-a", "--add-sub"):
             insert_subscription_from_url(arg)
-        elif opt in ("-u", "--subs="):
+        elif opt in ("-u", "--subs"):
             subs:[Subscription] = fetch_all_subscriptions()
             save_sub_to_selection_list(subs)
             show_list(subs)
