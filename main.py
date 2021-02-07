@@ -20,7 +20,7 @@ from time import perf_counter
 import json
 from data.repository.SelectionListRepository import save_videos_to_selection_list, save_sub_to_selection_list, save_selection_list, read_selection_list, read_selection_list_file, remove_item_from_selection_list, get_selection_list_type, save_content_player_to_selection_list
 from domain.ContentPlayer import ContentPlayer
-from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player, fetch_content_players,update_content_player
+from data.repository.ContentPlayerRepository import insert_content_player, fetch_active_content_player, fetch_content_players,update_content_player, delete_content_player
 
 def get_new_videos():
     driver = SimpleDriver()
@@ -119,6 +119,8 @@ def main(argv):
                 delete_video_cascade(result[index].id)
             elif get_selection_list_type() == "subscription":
                 delete_sub(None, result[index].url_name)            
+            elif get_selection_list_type() == "content_player":
+                delete_content_player(None, result[index].name)
             remove_item_from_selection_list(index)
         elif opt in ("-a", "--add-sub"):
             insert_subscription_from_url(arg)

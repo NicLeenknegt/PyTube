@@ -29,3 +29,8 @@ def update_content_player(cursor, cp_name:str):
     for row in cursor:
         print(row)
 
+@delete_request("content_player", "where name = ?")
+def delete_content_player(cursor, cp_name:str):
+    for row in cursor:
+        print(row)
+    return cursor
