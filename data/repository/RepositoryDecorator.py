@@ -18,7 +18,7 @@ def insert_request(table:str):
         def wrapped(*args):
             project_dir = os.getcwd()
             conn = sqlite3.connect(project_dir + "/data/db/py_tube.db")
-            cursor = conn.execute("insert or ignore into " + table + " values " + func(*args))
+            cursor = conn.execute("insert into " + table + " values " + func(*args))
             conn.commit()
             conn.close()
         return wrapped

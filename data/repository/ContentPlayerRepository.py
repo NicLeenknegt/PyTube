@@ -3,7 +3,13 @@ from domain.ContentPlayer import ContentPlayer
 
 @insert_request("content_player")
 def insert_content_player(content_player:ContentPlayer):
-    is_active =  '1' if content_player.is_active else '0'
+    if content_player.is_active:
+        is_active =  '1'
+        # make all other players unactive when a new active player is added
+        # could be also done as after insert trigger in sqlite
+        set_all_content_players_unactive()
+    else:
+        is_active = '0'
     return '( "' + content_player.name + '","' + content_player.command + '",' + is_active + ')'
 
 @fetch_request("select * from active_content_player")
@@ -23,6 +29,12 @@ def fetch_content_players(cursor = None) -> [ContentPlayer]:
         fetched_content_players.append(ContentPlayer(row[0], row[1], None, is_active))
     
     return fetched_content_players
+
+
+@update_request("content_player", "set is_active = 0 where is_active = 1")
+def set_all_content_players_unactive(cursor = None):
+    for row in cursor:
+        print(row)
 
 @update_request("content_player", "set is_active = 1 where name = ?")
 def update_content_player(cursor, cp_name:str):

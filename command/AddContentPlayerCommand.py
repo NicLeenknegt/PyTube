@@ -1,7 +1,9 @@
+from view.MessageView import print_insert_success_message
 from command.ICommand import ICommand
 from domain.ContentPlayer import ContentPlayer
 from data.repository.ContentPlayerRepository import insert_content_player
 from shutil import which
+from sqlite3 import OperationalError, IntegrityError
 
 class AddContentPlayerCommand(ICommand):
 
@@ -23,7 +25,14 @@ class AddContentPlayerCommand(ICommand):
             content_player = ContentPlayer(argv[1], argv[2], argv[3])
         elif len(argv) == 3:
             content_player = ContentPlayer(argv[1], argv[2])
-        insert_content_player(content_player)
+        try:
+            insert_content_player(content_player)
+        except OperationalError as err:
+            raise ValueError("database failure: something went wrong while inserting a new player")
+        except IntegrityError as err:
+            raise ValueError("database failure: there already exists a player with name \"{}\"".format(content_player.name))
+        
+        print_insert_success_message("\"{0}\" player".format(content_player.name))
 
     def get_short_option(self) -> str:
         return None
