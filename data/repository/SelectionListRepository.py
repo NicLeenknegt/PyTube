@@ -1,6 +1,7 @@
 from domain.ContentPlayer import ContentPlayer, content_player_from_dict
 from domain.Video import Video, vid_from_dict
-from domain.Subscription import Subscription,subscription_from_dict
+from domain.Subscription import Subscription
+from controller.SubscriptionController import subscription_from_dict
 import json
 import os
 

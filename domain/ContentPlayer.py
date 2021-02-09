@@ -3,9 +3,9 @@ from subprocess import call, PIPE
 
 class ContentPlayer:
 
-    def __init__(self, name:str, command:str, is_active:bool = False):
+    def __init__(self, name:str, command:str, args:str = None, is_active:bool = False):
         self.name = name
-        self.command = command
+        self.command = command + " " + ("" if args is None else args)
         self.is_active = is_active
 
     def play(self, url:str):
@@ -28,5 +28,6 @@ def content_player_from_dict(json:dict):
     return ContentPlayer(
             json['name'],
             json['command'],
+            None,
             json['is_active']
             )

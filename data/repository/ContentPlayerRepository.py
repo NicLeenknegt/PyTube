@@ -11,7 +11,7 @@ def fetch_active_content_player(cursor = None) -> ContentPlayer:
     fetched_content_players:[ContentPlayer] = []
     for row in cursor:
         is_active =  True if row[2] == 1 else False
-        fetched_content_players.append(ContentPlayer(row[0], row[1], is_active))
+        fetched_content_players.append(ContentPlayer(row[0], row[1],None,  is_active))
     
     return fetched_content_players[0]
 
@@ -20,7 +20,7 @@ def fetch_content_players(cursor = None) -> [ContentPlayer]:
     fetched_content_players:[ContentPlayer] = []
     for row in cursor:
         is_active =  True if row[2] == 1 else False
-        fetched_content_players.append(ContentPlayer(row[0], row[1], is_active))
+        fetched_content_players.append(ContentPlayer(row[0], row[1], None, is_active))
     
     return fetched_content_players
 
