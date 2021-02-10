@@ -6,7 +6,7 @@ from domain.ContentPlayer import ContentPlayer
 class ContentPlayerSelectCommand(ICommand):
 
     def validate_input(self, *argv):
-        if len(argv) != 3:
+        if len(argv) != 2:
             raise ValueError("internal error: ContentPlayerSelectCommand receives wrong arguments from SelectCommand")     
 
     def run(self, *argv):

@@ -1,3 +1,4 @@
+from data.repository.ContentPlayerRepository import fetch_active_content_player
 from command.ICommand import ICommand
 from domain.ContentPlayer import ContentPlayer
 from data.repository.SelectionListRepository import remove_item_from_selection_list
@@ -6,13 +7,13 @@ from data.repository.VideoRepository import delete_new_video
 class VideoSelectCommand(ICommand):
 
     def validate_input(self, *argv):
-        if len(argv) != 3:
+        if len(argv) != 2:
             raise ValueError("internal error: VideoSelectCommand receives wrong arguments from SelectCommand")     
 
     def run(self, *argv):
         index:int = argv[0]
         result:[Video] = argv[1]
-        content_player:ContentPlayer = argv[2]
+        content_player:ContentPlayer = fetch_active_content_player()
          
         content_player.play('https://www.youtube.com/watch?v=' + result[index].id)
         '''

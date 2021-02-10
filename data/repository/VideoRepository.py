@@ -1,4 +1,4 @@
-from data.repository.RepositoryDecorator import fetch_request, insert_request, delete_request
+from data.repository.RepositoryDecorator import fetch_request, insert_request, delete_request, ignore_insert_request
 
 from domain.Video import Video
 from datetime import datetime
@@ -19,7 +19,7 @@ def fetch_new_videos(cursor = None) -> [Video]:
      
     return fetched_videos
 
-@insert_request("video")
+@ignore_insert_request("video")
 def insert_video(vid:Video):
     sql_title:str = vid.title.replace("'", "''")
     return '( "' + vid.id + '",\'' + sql_title + '\',"' + vid.upload_date.isoformat() + '","' + vid.subscription_name + '")'
@@ -28,7 +28,7 @@ def insert_video_and_new_video(vid:Video):
     insert_video(vid)
     insert_new_video(vid.id)
 
-@insert_request("new_video")
+@ignore_insert_request("new_video")
 def insert_new_video(vid_id:str):
     return '( "' + vid_id + '" )'
 

@@ -17,7 +17,7 @@ class AddSubscriptionCommand(ICommand):
     def run(self, *argv):
         
         url:str = argv[1]
-
+        print(url)
         driver = SimpleDriver()
         content_filter = Youtube2020Filter()
         content_converter = YTVideoConverter()

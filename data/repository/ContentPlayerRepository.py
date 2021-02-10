@@ -19,6 +19,9 @@ def fetch_active_content_player(cursor = None) -> ContentPlayer:
         is_active =  True if row[2] == 1 else False
         fetched_content_players.append(ContentPlayer(row[0], row[1],None,  is_active))
     
+    if fetched_content_players == []:
+        raise ValueError("operation error: no active content player was found, add a player with pytube --add-player")
+    
     return fetched_content_players[0]
 
 @fetch_request("select * from content_player")

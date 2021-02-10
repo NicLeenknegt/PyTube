@@ -13,6 +13,17 @@ def fetch_request(statement:str):
         return wrapped
     return wrap
 
+def ignore_insert_request(table:str):
+    def wrap(func):
+        def wrapped(*args):
+            project_dir = os.getcwd()
+            conn = sqlite3.connect(project_dir + "/data/db/py_tube.db")
+            cursor = conn.execute("insert or ignore into " + table + " values " + func(*args))
+            conn.commit()
+            conn.close()
+        return wrapped
+    return wrap
+
 def insert_request(table:str):
     def wrap(func):
         def wrapped(*args):

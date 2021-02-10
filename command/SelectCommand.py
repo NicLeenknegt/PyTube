@@ -1,4 +1,3 @@
-from data.repository.ContentPlayerRepository import fetch_active_content_player
 from data.repository.SelectionListRepository import read_selection_list, get_selection_list_type
 from command.ICommand import ICommand
 from command.select_command.VideoSelectCommand import VideoSelectCommand
@@ -27,14 +26,13 @@ class SelectCommand(ICommand):
             raise ValueError("illegal format: index needs to be number")
 
         result = read_selection_list()
-        content_player = fetch_active_content_player()
 
         if (index < 0 or index >= len(result)):
             raise ValueError("index out of range: needs to be between {0} and {1}".format(0, len(result) - 1))
 
         for command in command_array:
             if get_selection_list_type() == command.get_long_option():
-                command.execute(index, result, content_player)
+                command.execute(index, result)
 
     def get_short_option(self) -> str:
         return "-s"

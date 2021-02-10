@@ -8,7 +8,7 @@ from domain.Subscription import Subscription
 class SubscriptionSelectCommand(ICommand):
 
     def validate_input(self, *argv):
-        if len(argv) != 3:
+        if len(argv) != 2:
             raise ValueError("internal error: SubscriptionSelectCommand receives wrong arguments from SelectCommand")     
 
     def run(self, *argv):

@@ -26,7 +26,7 @@ class ICommand(metaclass=abc.ABCMeta):
         options:[str] = []
         if self.get_short_option() is not None:
             options.append(self.get_short_option())
-        elif self.get_long_option() is not None:
+        if self.get_long_option() is not None:
             options.append(self.get_long_option())
 
         return options
