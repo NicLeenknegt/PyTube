@@ -23,21 +23,26 @@ def load_all_videos(sub:Subscription):
             except IntegrityError as err:
                 raise ValueError("database failure: an error ocurred while inserting the video \"{}\"".format(vid.title))
 
-def load_new_videos(self:Subscription):
-    html:str = self.web_driver.get_html(
-            self.url_format.format(self.url_name)
+def load_new_videos(sub:Subscription):
+    html:str = sub.web_driver.get_html(
+            sub.url_format.format(sub.url_name)
             )
-    json:str = self.content_filter.get_content( html, self.last_video_id)
+    json:str = sub.content_filter.get_content( html, sub.last_video_id)
     if json is not None:
         new_video_max_date:datetime = fetch_new_video_max_date()
         new_video_max_date = new_video_max_date - timedelta(days=1)
-        converted_vids:[Video] = self.content_converter.convert(json, self.url_name)
+        converted_vids:[Video] = sub.content_converter.convert(json, sub.url_name)
         # [::-1] reverses the list, so the new videos will be inserted in the end
         for vid in converted_vids[::-1]:
             # to prevent new subs from overloading the new tab
             # Only videos newer than the highest date can be inserted
             if new_video_max_date < vid.upload_date:            
-                insert_video_and_new_video(vid)        
+                try:
+                    insert_video_and_new_video(vid)        
+                except OperationalError:
+                    raise ValueError("database failure: an error occured while saving videos of \"{}\"".format(sub.url_name))
+                except IntegrityError as err:
+                    raise ValueError("database failure: an error ocurred while inserting the video \"{}\"".format(vid.title))
 
 def subscription_from_dict(json:dict):
     return Subscription(
