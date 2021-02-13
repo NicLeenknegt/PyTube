@@ -6,16 +6,22 @@ from data.repository.VideoRepository import insert_video, fetch_new_video_max_da
 from datetime import datetime, timedelta
 from multiprocessing import Pool
 from data.repository.SubscriptionRepository import fetch_all_subs_w_last_id
+from sqlite3 import OperationalError, IntegrityError
 
-def load_all_videos(self:Subscription):
-    html:str = self.web_driver.get_html(
-            self.url_format.format(self.url_name)
+def load_all_videos(sub:Subscription):
+    html:str = sub.web_driver.get_html(
+            sub.url_format.format(sub.url_name)
             )
-    json:str = self.content_filter.get_content( html, self.last_video_id)
+    json:str = sub.content_filter.get_content( html, sub.last_video_id)
     if json is not None:
-        converted_vids:[Video] = self.content_converter.convert(json, self.url_name)
+        converted_vids:[Video] = sub.content_converter.convert(json, sub.url_name)
         for vid in converted_vids:
-            insert_video(vid)        
+            try:
+                insert_video(vid)        
+            except OperationalError:
+                raise ValueError("database failure: an error occured while saving videos of \"{}\"".format(sub.url_name))
+            except IntegrityError as err:
+                raise ValueError("database failure: an error ocurred while inserting the video \"{}\"".format(vid.title))
 
 def load_new_videos(self:Subscription):
     html:str = self.web_driver.get_html(

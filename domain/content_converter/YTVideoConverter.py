@@ -1,4 +1,4 @@
-import json
+from json import loads, JSONDecodeError
 import re
 from domain.Video import Video
 from domain.content_converter.IContentConverter import IContentConverter
@@ -13,7 +13,12 @@ class YTVideoConverter(IContentConverter):
         self.date_converter:IContentConverter = DateConverter()
 
     def convert(self, json_str:str,name:str) -> [Video]:
-        json_array = json.loads(json_str)
+
+        try:
+            json_array = loads(json_str)
+        except JSONDecodeError as err:
+            raise ValueError("decoding error: youtube video converter received faulty json from filter")
+
         vid_array:[Video] = []
         try:        
             #Set locale for date conversion

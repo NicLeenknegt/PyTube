@@ -29,6 +29,8 @@ class AddSubscriptionCommand(ICommand):
         elif "/user/" in url:
             url_name = url[len("https://www.youtube.com/user/"):-len("/videos")]
             sub:Subscription = Subscription(url_name, "https://www.youtube.com/user/{0}/videos", "USER")
+        else:
+            raise ValueError("unsupported error: the given url is not supported in this version")
         sub.set_filter(content_filter)
         sub.set_driver(driver)
         sub.set_converter(content_converter)
