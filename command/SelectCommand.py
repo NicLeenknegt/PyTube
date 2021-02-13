@@ -3,7 +3,6 @@ from command.ICommand import ICommand
 from command.select_command.VideoSelectCommand import VideoSelectCommand
 from command.select_command.SubscriptionSelectCommand import SubscriptionSelectCommand
 from command.select_command.ContentPlayerSelectCommand import ContentPlayerSelectCommand
-from view.MessageView import print_select_success_message
 
 class SelectCommand(ICommand):
 
