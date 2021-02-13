@@ -3,6 +3,8 @@ from command.ICommand import ICommand
 from domain.ContentPlayer import ContentPlayer
 from data.repository.SelectionListRepository import remove_item_from_selection_list
 from data.repository.VideoRepository import delete_new_video
+from sqlite3 import OperationalError
+from view.MessageView import print_select_success_message
 
 class VideoSelectCommand(ICommand):
 
@@ -13,7 +15,11 @@ class VideoSelectCommand(ICommand):
     def run(self, *argv):
         index:int = argv[0]
         result:[Video] = argv[1]
-        content_player:ContentPlayer = fetch_active_content_player()
+        
+        try:
+            content_player:ContentPlayer = fetch_active_content_player()
+        except OperationalError as err:
+            raise ValueError("database failure: something went wrong while fetching the player")
          
         content_player.play('https://www.youtube.com/watch?v=' + result[index].id)
         '''
@@ -22,7 +28,11 @@ class VideoSelectCommand(ICommand):
         Perhaps I should make a seperate command for that.
         '''
         remove_item_from_selection_list(index)
-        delete_new_video(None, result[index].id)
+        try:
+            delete_new_video(None, result[index].id)
+        except OperationalError as err:
+            raise ValueError("database failure: failed to remove the video \"{}\" from the new list. Will need to be manually deleted later".format(result[index].title))
+        print_select_success_message("video", result[index].title)
 
     def get_short_option(self) -> str:
         return None
