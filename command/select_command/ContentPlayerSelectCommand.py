@@ -2,6 +2,8 @@ from command.ICommand import ICommand
 from data.repository.ContentPlayerRepository import update_content_player, fetch_content_players
 from data.repository.SelectionListRepository import save_content_player_to_selection_list
 from domain.ContentPlayer import ContentPlayer
+from sqlite3 import OperationalError
+from view.MessageView import print_select_success_message
 
 class ContentPlayerSelectCommand(ICommand):
 
@@ -13,8 +15,14 @@ class ContentPlayerSelectCommand(ICommand):
         index:int = argv[0]
         result:[ContentPlayer] = argv[1]
 
-        update_content_player(None, result[index].name)
+        try:
+            update_content_player(None, result[index].name)
+        except OperationalError:
+            raise ValueError("database failure: failed to set the active player")
+
+        # updates the list of content players if the user decides to select multiple times,
         save_content_player_to_selection_list(fetch_content_players())
+        print_select_success_message("player", result[index].name)
 
     def get_short_option(self) -> str:
         return None

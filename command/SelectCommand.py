@@ -33,6 +33,7 @@ class SelectCommand(ICommand):
         for command in command_array:
             if get_selection_list_type() == command.get_long_option():
                 command.execute(index, result)
+                return
 
     def get_short_option(self) -> str:
         return "-s"
