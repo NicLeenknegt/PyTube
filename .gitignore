@@ -146,3 +146,6 @@ log_files/**
 # test files
 *.json
 *.html
+
+# makefile
+makefile
