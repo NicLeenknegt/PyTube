@@ -10,7 +10,7 @@ class SubscriptionSelectCommand(ICommand):
 
     def validate_input(self, *argv):
         if len(argv) != 2:
-            raise ValueError("internal error: SubscriptionSelectCommand receives wrong arguments from SelectCommand")     
+            raise ValueError("internal error: SubscriptionSelectCommand receives wrong arguments from SelectCommand")
 
     def run(self, *argv):
         index:int = argv[0]
@@ -21,7 +21,7 @@ class SubscriptionSelectCommand(ICommand):
         except OperationalError as err:
             raise ValueError("database failure: something went wrong while fetching the videos of \"{}\"".format(result[index].url_name))
 
-        save_videos_to_selection_list(vids)                
+        save_videos_to_selection_list(vids)
         show_list(vids)
 
     def get_short_option(self) -> str:

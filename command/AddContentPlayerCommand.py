@@ -14,9 +14,9 @@ class AddContentPlayerCommand(ICommand):
             raise ValueError("illegal argument: third optional argument has to be 'active'")
         if which(argv[2].replace("\\","")) is None:
             raise ValueError("illegal argument: command does not exist")
-        
+
     def run(self, *argv):
-        
+
         if len(argv) == 5 and argv[4] == "active":
             content_player = ContentPlayer(argv[1], argv[2], argv[3], True)
         elif len(argv) == 4 and argv[3] == "active":
@@ -31,7 +31,7 @@ class AddContentPlayerCommand(ICommand):
             raise ValueError("database failure: something went wrong while inserting a new player")
         except IntegrityError as err:
             raise ValueError("database failure: there already exists a player with name \"{}\"".format(content_player.name))
-        
+
         print_insert_success_message("\"{0}\" player".format(content_player.name))
 
     def get_short_option(self) -> str:

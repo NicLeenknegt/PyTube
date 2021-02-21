@@ -11,9 +11,9 @@ class SelectCommand(ICommand):
             raise ValueError("missing argument: [--select|-s] needs index argument")
         if len(argv) != 2:
             raise ValueError("illegal format: pytube [--select|-s] index")
-    
+
     def run(self, *argv):
-        
+
         command_array:[ICommand] = [ 
                 VideoSelectCommand(), 
                 SubscriptionSelectCommand(),

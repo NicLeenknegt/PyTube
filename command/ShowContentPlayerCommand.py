@@ -9,7 +9,7 @@ class ShowContentPlayerCommand(ICommand):
     def validate_input(self, *argv):
         if len(argv) != 1:
             raise ValueError("illegal format: pytube [--players|-p]")
-    
+
     def run(self, *argv):
         try:
             players:[ContentPlayer] = fetch_content_players()

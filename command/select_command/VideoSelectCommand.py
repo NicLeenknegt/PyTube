@@ -15,12 +15,12 @@ class VideoSelectCommand(ICommand):
     def run(self, *argv):
         index:int = argv[0]
         result:[Video] = argv[1]
-        
+
         try:
             content_player:ContentPlayer = fetch_active_content_player()
         except OperationalError as err:
             raise ValueError("database failure: something went wrong while fetching the player")
-         
+
         content_player.play('https://www.youtube.com/watch?v=' + result[index].id)
         '''
         This removes the selected item from the locally saves selection list

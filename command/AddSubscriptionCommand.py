@@ -6,17 +6,18 @@ from domain.content_filter.Youtube2020Filter import Youtube2020Filter
 from domain.content_converter.YTVideoConverter import YTVideoConverter
 from domain.Subscription import Subscription
 from sqlite3 import OperationalError, IntegrityError
+from view.MessageView import print_insert_success_message
 
 class AddSubscriptionCommand(ICommand):
 
     def validate_input(self, *argv):
         if len(argv) != 2:
             raise ValueError("illegal format: pytube [--add-sub|-a] url")
-        if "https://www.youtube.com/" not in argv[1]: 
-            raise ValueError("illegal argument: given argument is not a supported url")
-    
+        if "https://www.youtube.com/" not in argv[1] or "/videos" != argv[1][-7:]:
+            raise ValueError("illegal argument: given argument is not a supported url, needs to be in form \"https://www.youtube.com/c/.../videos\" or \"https://www.youtube.com/user/.../videos\"")
+
     def run(self, *argv):
-        
+
         url:str = argv[1]
 
         driver = SimpleDriver()
@@ -35,7 +36,7 @@ class AddSubscriptionCommand(ICommand):
         sub.set_driver(driver)
         sub.set_converter(content_converter)
 
-        try:        
+        try:
             insert_subscription(sub)
         except OperationalError:
             raise ValueError("database failure: something went wrong while inserting a new subscription")
@@ -48,6 +49,7 @@ class AddSubscriptionCommand(ICommand):
             # remove sub if loading videos fails
             delete_sub(sub.name)
             raise
+        print_insert_success_message("{} subscription".format(sub.url_name))
 
     def get_short_option(self) -> str:
         return "-a"

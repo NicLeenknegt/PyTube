@@ -10,8 +10,12 @@ from command.ShowContentPlayerCommand import ShowContentPlayerCommand
 from command.AddContentPlayerCommand import AddContentPlayerCommand
 from command.ICommand import ICommand
 
+
 def main(argv):
-    
+
+    if not argv:
+        argv.append("-n")
+
     command_array = [
             SelectCommand(),
             ShowNewVideosCommand(),
