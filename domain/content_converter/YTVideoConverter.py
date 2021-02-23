@@ -20,7 +20,7 @@ class YTVideoConverter(IContentConverter):
             raise ValueError("decoding error: youtube video converter received faulty json from filter")
 
         vid_array:[Video] = []
-        try:        
+        try:
             #Set locale for date conversion
             py_tube_date_matches = date_matches_dict[json_array[0]['locale']]
 
@@ -32,13 +32,13 @@ class YTVideoConverter(IContentConverter):
 
                 vid_title:str = json_item['gridVideoRenderer']['title']['runs'][0]['text']
                 vid_title_len:int = len(vid_title)
-                
+
                 date_str:str = json_item['gridVideoRenderer']['title']['accessibility']['accessibilityData']['label'][vid_title_len:]
-                    
+
                 date:datetime = self.date_converter.convert(date_str, None)
 
                 vid_array.append(Video(vid_id, vid_title,date,name))
         except KeyError as err:
             raise ValueError("conversion error: possible update needed")
-                
+
         return vid_array 

@@ -8,7 +8,7 @@ def fetch_all_videos(cursor, amountt:int) -> [Video]:
     fetched_videos:[Video] = []
     for row in cursor:
         fetched_videos.append(Video(row[0],row[1], datetime.fromisoformat(row[2]), row[3]))
-     
+
     return fetched_videos
 
 @fetch_request("select * from new_videos order by upload_date desc")
@@ -16,10 +16,10 @@ def fetch_new_videos(cursor = None) -> [Video]:
     fetched_videos:[Video] = []
     for row in cursor:
         fetched_videos.append(Video(row[0],row[1], datetime.fromisoformat(row[2]), row[3]))
-     
+
     return fetched_videos
 
-@ignore_insert_request("video")
+@insert_request("video")
 def insert_video(vid:Video):
     sql_title:str = vid.title.replace("'", "''")
     return '( "' + vid.id + '",\'' + sql_title + '\',"' + vid.upload_date.isoformat() + '","' + vid.subscription_name + '")'
@@ -28,7 +28,7 @@ def insert_video_and_new_video(vid:Video):
     insert_video(vid)
     insert_new_video(vid.id)
 
-@ignore_insert_request("new_video")
+@insert_request("new_video")
 def insert_new_video(vid_id:str):
     return '( "' + vid_id + '" )'
 
@@ -47,7 +47,7 @@ def fetch_all_videos_of_subscription(cursor, subscription_name:str):
     fetched_videos:[Video] = []
     for row in cursor:
         fetched_videos.append(Video(row[0],row[1], datetime.fromisoformat(row[2]), row[3]))
-     
+
     return fetched_videos
 
 def delete_video_cascade(video_id:str):

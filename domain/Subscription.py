@@ -28,6 +28,7 @@ class Subscription:
 
     def set_filter(self, content_filter:IContentFilter):
         self.content_filter = content_filter
+
     def __str__(self):
         return "{0:<40}{1:60}{2:10}".format(self.url_name, self.url_format, self.type)
 

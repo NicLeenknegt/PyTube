@@ -3,6 +3,7 @@ from data.repository.SubscriptionRepository import fetch_all_subscriptions
 from data.repository.SelectionListRepository import save_sub_to_selection_list
 from command.ICommand import ICommand
 from sqlite3 import OperationalError
+from controller.SubscriptionController import load_all_videos_test
 
 class ShowSubscriptionsCommand(ICommand):
 

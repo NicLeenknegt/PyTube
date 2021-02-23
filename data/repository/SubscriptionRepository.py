@@ -6,7 +6,7 @@ def fetch_all_subscriptions(cursor) -> [Subscription]:
     fetched_subscriptions:[Subscription] = []
     for row in cursor:
         fetched_subscriptions.append(Subscription(row[0],row[1], row[2]))
-    
+
     return fetched_subscriptions
 
 @insert_request("subscription")
@@ -18,7 +18,7 @@ def fetch_all_subs_w_last_id(cursor) -> [Subscription]:
     fetched_subscriptions:[Subscription] = []
     for row in cursor:
         fetched_subscriptions.append(Subscription(row[0],row[1], row[2], row[3]))
-    
+
     return fetched_subscriptions
 
 @delete_request("subscription", "where name = ?")

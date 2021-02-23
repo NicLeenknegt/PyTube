@@ -3,7 +3,7 @@ from domain.content_filter.IContentFilter import IContentFilter
 from log.file_logger import log
 
 class Youtube2020Filter(IContentFilter):
-    
+
     def __init__(self):
         self.html_re = compile(r"\"items\":\[\{\"gridVideoRenderer\".*?\"}]}}}]}}]")
         self.locale_re = compile(r"locale=.*?_")
@@ -23,14 +23,15 @@ class Youtube2020Filter(IContentFilter):
 
         #HTML ITERATOR
         last_video_id = self.get_first_item(html)
+
         if last_video_id == last_local_id:
             return None
-        
+
         itererator_reg = self.html_iterator.search(html)
-        
-        while (last_video_id != last_local_id and itererator_reg is not None):
+
+        while (itererator_reg is not None and self.get_first_item(itererator_reg.group()) != last_local_id):
+            print("{0} {1}".format(self.get_first_item(itererator_reg.group()), last_local_id))
             result:str = result + itererator_reg.group()
-            last_video_id = self.get_first_item(itererator_reg.group())
             html = html[itererator_reg.end():]
             itererator_reg = self.html_iterator.search(html)
 

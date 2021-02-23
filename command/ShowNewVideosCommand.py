@@ -11,7 +11,6 @@ class ShowNewVideosCommand(ICommand):
         if len(argv) != 1:
             raise ValueError("illegal format: pytube [--new|-n]")
 
-
     def run(self, *argv):
         try:
             get_new_videos()
